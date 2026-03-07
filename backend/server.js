@@ -36,3 +36,43 @@ const PORT = process.env.PORT || 4000;
 app.listen(PORT, () => {
     console.log(`Server running on http://localhost:${PORT}`);
 });
+
+
+
+
+
+app.post("/admin/login", (req,res)=>{
+
+const {username,password} = req.body;
+
+const sql = "SELECT * FROM admins WHERE username=? AND password=?";
+
+db.query(sql,[username,password],(err,result)=>{
+
+if(err) return res.json({success:false});
+
+if(result.length>0){
+
+res.json({success:true});
+
+}else{
+
+res.json({success:false});
+
+}
+
+});
+
+});
+
+app.get("/admin/registrations",(req,res)=>{
+
+db.query("SELECT * FROM registrations",(err,result)=>{
+
+if(err) return res.send(err);
+
+res.json(result);
+
+});
+
+});
