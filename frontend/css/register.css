@@ -1,0 +1,73 @@
+/* ================= REGISTER SECTION ================= */
+
+.register-section{
+    padding:60px 10%;
+    text-align:center;
+    background:#f5f7fa;
+}
+
+.register-section h1{
+    font-size:36px;
+    margin-bottom:10px;
+}
+
+.register-section p{
+    color:#555;
+    margin-bottom:40px;
+}
+
+
+/* ================= FORM CONTAINER ================= */
+
+.form-container{
+    max-width:500px;
+    margin:auto;
+    background:white;
+    padding:30px;
+    border-radius:10px;
+    box-shadow:0 5px 15px rgba(0,0,0,0.1);
+}
+
+
+/* ================= FORM GROUP ================= */
+
+.form-group{
+    margin-bottom:20px;
+    text-align:left;
+}
+
+.form-group label{
+    display:block;
+    margin-bottom:6px;
+    font-weight:600;
+}
+
+.form-group input,
+.form-group select{
+    width:100%;
+    padding:10px;
+    border:1px solid #ccc;
+    border-radius:5px;
+    font-size:14px;
+}
+
+
+/* ================= INPUT FOCUS EFFECT ================= */
+
+.form-group input:focus,
+.form-group select:focus{
+    outline:none;
+    border-color:#0077ff;
+}
+
+
+/* ================= BUTTON ================= */
+
+.form-container .btn{
+    width:100%;
+    padding:12px;
+    font-size:16px;
+    margin-top:10px;
+    border: none;       /* ADD THIS */
+    cursor: pointer;    /* ADD THIS */
+}

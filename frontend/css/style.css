@@ -1,0 +1,232 @@
+/* ================= GLOBAL STYLES ================= */
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial, Helvetica, sans-serif;
+}
+
+body{
+    line-height:1.6;
+    background:#ffffff;
+}
+
+
+/* ================= NAVBAR ================= */
+
+.navbar{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:20px 10%;
+    background:#0d1b2a;
+}
+
+.logo{
+    color:white;
+    font-size:24px;
+}
+
+.nav-links{
+    list-style:none;
+    display:flex;
+    gap:25px;
+}
+
+.nav-links a{
+    text-decoration:none;
+    color:white;
+    font-size:16px;
+    transition:0.3s;
+}
+
+.nav-links a:hover{
+    color:#00b4d8;
+}
+
+
+/* ================= HERO SECTION ================= */
+
+.hero{
+    height:80vh;
+    background:linear-gradient(rgba(0,0,0,0.6),rgba(0,0,0,0.6)),
+    url("../images/codecraft.jpg");
+    background-size:cover;
+    background-position:center;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    text-align:center;
+    color:white;
+}
+
+.hero h1{
+    font-size:48px;
+    margin-bottom:15px;
+}
+
+.hero p{
+    font-size:18px;
+    margin-bottom:20px;
+}
+
+
+/* ================= BUTTON ================= */
+
+.btn{
+    display:inline-block;
+    padding:12px 22px;
+    background:#0077ff;
+    color:white;
+    text-decoration:none;
+    border-radius:5px;
+    transition:0.3s;
+}
+
+.btn:hover{
+    background:#0056b3;
+}
+
+
+/* ================= ABOUT SECTION ================= */
+
+.about{
+    padding:60px 10%;
+    text-align:center;
+}
+
+.about h2{
+    font-size:32px;
+    margin-bottom:20px;
+}
+
+.about p{
+    max-width:700px;
+    margin:auto;
+    color:#555;
+}
+
+
+/* ================= COUNTER SECTION ================= */
+
+.counter-section{
+    display:flex;
+    justify-content:center;
+    gap:50px;
+    padding:60px 10%;
+    background:#f1f5f9;
+    text-align:center;
+}
+
+.counter-box h2{
+    font-size:36px;
+    color:#0077ff;
+}
+
+.counter-box p{
+    margin-top:10px;
+}
+
+
+/* ================= FEATURED EVENTS ================= */
+
+.featured-events{
+    padding:60px 10%;
+    text-align:center;
+}
+
+.featured-events h2{
+    margin-bottom:40px;
+}
+
+.events-container{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+    gap:30px;
+}
+
+.event-card{
+    background:white;
+    border-radius:10px;
+    overflow:hidden;
+    box-shadow:0 5px 15px rgba(0,0,0,0.1);
+}
+
+.event-card img{
+    width:100%;
+    height:180px;
+    object-fit:cover;
+}
+
+.event-card h3{
+    margin:15px 0;
+}
+
+.event-card p{
+    padding:0 15px 20px 15px;
+    color:#666;
+}
+
+
+/* ================= CTA SECTION ================= */
+
+.cta{
+    padding:60px 10%;
+    text-align:center;
+    background:#0d1b2a;
+    color:white;
+}
+
+.cta h2{
+    margin-bottom:10px;
+}
+
+.cta p{
+    margin-bottom:20px;
+}
+
+
+/* ================= FOOTER ================= */
+
+footer{
+    background:#0d1b2a;
+    color:white;
+    text-align:center;
+    padding:20px;
+    margin-top:40px;
+}
+
+.nav-links a.active{
+    color:#00b4d8;
+}
+
+/* ================= TEXTAREA STYLE ================= */
+
+.form-group textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 14px;
+    font-family: Arial, Helvetica, sans-serif;
+    resize: vertical;
+}
+
+.form-group textarea:focus {
+    outline: none;
+    border-color: #0077ff;
+}
+
+
+/* ================= CONTACT BUTTON ================= */
+
+.form-container .btn {
+    display: inline-block;
+    width: 100%;
+    padding: 12px;
+    font-size: 16px;
+    margin-top: 10px;
+    border: none;
+    cursor: pointer;
+}
