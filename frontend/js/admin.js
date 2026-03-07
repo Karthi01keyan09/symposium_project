@@ -1,36 +1,42 @@
-document.getElementById("adminLoginForm").addEventListener("submit", function(e){
+// Always point to the production Render backend (Railway DB)
+// This ensures admin panel sees the same data as the live website
+const BASE_URL = "https://symposium-backend-vgyc.onrender.com";
 
-e.preventDefault();
+document.getElementById("adminLoginForm").addEventListener("submit", async function (e) {
+    e.preventDefault();
 
-const username = document.getElementById("username").value;
-const password = document.getElementById("password").value;
+    const username = document.getElementById("username").value.trim();
+    const password = document.getElementById("password").value.trim();
+    const loginBtn = document.getElementById("loginBtn");
+    const errorMsg = document.getElementById("errorMsg");
 
-fetch("https://symposium-backend-vgyc.onrender.com/admin/login",{
+    loginBtn.disabled = true;
+    loginBtn.textContent = "Signing in…";
+    errorMsg.style.display = "none";
 
-method:"POST",
+    try {
+        const res = await fetch(`${BASE_URL}/admin/login`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ username, password })
+        });
 
-headers:{
-"Content-Type":"application/json"
-},
+        const data = await res.json();
 
-body:JSON.stringify({username,password})
-
-})
-
-.then(res=>res.json())
-
-.then(data=>{
-
-if(data.success){
-
-window.location.href="dashboard.html";
-
-}else{
-
-alert("Invalid login");
-
-}
-
-});
-
+        if (data.success) {
+            // Store session flag
+            sessionStorage.setItem("adminLoggedIn", "true");
+            window.location.href = "dashboard.html";
+        } else {
+            errorMsg.textContent = data.message || "Invalid username or password.";
+            errorMsg.style.display = "block";
+        }
+    } catch (err) {
+        errorMsg.textContent = "Cannot connect to server. Make sure the backend is running.";
+        errorMsg.style.display = "block";
+        console.error("Login error:", err);
+    } finally {
+        loginBtn.disabled = false;
+        loginBtn.textContent = "Sign In";
+    }
 });

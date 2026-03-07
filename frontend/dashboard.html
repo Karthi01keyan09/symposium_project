@@ -1,19 +1,546 @@
-<h2>Admin Dashboard</h2>
+<!DOCTYPE html>
+<html lang="en">
 
-<button onclick="loadRegistrations()">Load Registrations</button>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard – Symposium</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
 
-<table border="1" id="table">
-<thead>
-<tr>
-<th>ID</th>
-<th>Name</th>
-<th>Email</th>
-<th>Event</th>
-</tr>
-</thead>
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #0d0d1a;
+            color: #e2e8f0;
+            min-height: 100vh;
+        }
 
-<tbody></tbody>
+        /* ── Top Bar ── */
+        .topbar {
+            background: linear-gradient(90deg, #1a1a2e, #16213e);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            padding: 0 32px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 64px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.4);
+        }
 
-</table>
+        .topbar-brand {
+            font-size: 1.2rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #6c63ff, #f09af9);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
 
-<script src="dashboard.js"></script>
+        .topbar-right {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .badge {
+            background: rgba(108, 99, 255, 0.2);
+            color: #a78bfa;
+            border: 1px solid rgba(108, 99, 255, 0.3);
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .btn-logout {
+            padding: 8px 18px;
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            color: #fca5a5;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            font-family: 'Inter', sans-serif;
+            font-weight: 500;
+            transition: background 0.2s, border-color 0.2s;
+        }
+
+        .btn-logout:hover {
+            background: rgba(239, 68, 68, 0.2);
+            border-color: rgba(239, 68, 68, 0.5);
+        }
+
+        /* ── Main Layout ── */
+        .main {
+            padding: 32px;
+            max-width: 1300px;
+            margin: 0 auto;
+        }
+
+        /* ── Stats ── */
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 16px;
+            margin-bottom: 32px;
+        }
+
+        .stat-card {
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 16px;
+            padding: 24px;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #a78bfa;
+        }
+
+        .stat-label {
+            font-size: 0.8rem;
+            color: rgba(255, 255, 255, 0.4);
+            margin-top: 4px;
+        }
+
+        /* ── Action Bar ── */
+        .action-bar {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border-radius: 10px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            font-family: 'Inter', sans-serif;
+            cursor: pointer;
+            border: none;
+            transition: transform 0.15s, box-shadow 0.15s, opacity 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .btn:hover {
+            transform: translateY(-1px);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #6c63ff, #a855f7);
+            color: #fff;
+            box-shadow: 0 4px 15px rgba(108, 99, 255, 0.3);
+        }
+
+        .btn-refresh {
+            background: rgba(255, 255, 255, 0.06);
+            color: rgba(255, 255, 255, 0.7);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .btn-refresh:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .search-input {
+            margin-left: auto;
+            padding: 10px 16px;
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            color: #fff;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.875rem;
+            outline: none;
+            width: 220px;
+            transition: border-color 0.3s;
+        }
+
+        .search-input::placeholder {
+            color: rgba(255, 255, 255, 0.3);
+        }
+
+        .search-input:focus {
+            border-color: #6c63ff;
+        }
+
+        /* ── Table ── */
+        .table-wrapper {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 16px;
+            overflow: hidden;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        thead tr {
+            background: rgba(108, 99, 255, 0.1);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        th {
+            padding: 14px 18px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: rgba(255, 255, 255, 0.5);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            text-align: left;
+        }
+
+        tbody tr {
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            transition: background 0.15s;
+        }
+
+        tbody tr:last-child {
+            border-bottom: none;
+        }
+
+        tbody tr:hover {
+            background: rgba(255, 255, 255, 0.03);
+        }
+
+        td {
+            padding: 14px 18px;
+            font-size: 0.875rem;
+            color: rgba(255, 255, 255, 0.8);
+            vertical-align: middle;
+        }
+
+        td .event-badge {
+            background: rgba(108, 99, 255, 0.15);
+            color: #a78bfa;
+            border: 1px solid rgba(108, 99, 255, 0.25);
+            padding: 3px 10px;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .btn-edit {
+            padding: 6px 14px;
+            background: rgba(59, 130, 246, 0.15);
+            color: #93c5fd;
+            border: 1px solid rgba(59, 130, 246, 0.25);
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            font-family: 'Inter', sans-serif;
+            font-weight: 500;
+            transition: background 0.2s;
+        }
+
+        .btn-edit:hover {
+            background: rgba(59, 130, 246, 0.25);
+        }
+
+        .btn-delete {
+            padding: 6px 14px;
+            background: rgba(239, 68, 68, 0.12);
+            color: #fca5a5;
+            border: 1px solid rgba(239, 68, 68, 0.25);
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            font-family: 'Inter', sans-serif;
+            font-weight: 500;
+            transition: background 0.2s;
+        }
+
+        .btn-delete:hover {
+            background: rgba(239, 68, 68, 0.22);
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: rgba(255, 255, 255, 0.3);
+        }
+
+        .empty-state span {
+            font-size: 3rem;
+            display: block;
+            margin-bottom: 12px;
+        }
+
+        /* ── Modal ── */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(6px);
+            z-index: 500;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .modal {
+            background: #1a1a2e;
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 20px;
+            padding: 36px;
+            width: 100%;
+            max-width: 480px;
+            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.6);
+            animation: slideUp 0.25s ease;
+        }
+
+        @keyframes slideUp {
+            from {
+                transform: translateY(20px);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .modal h3 {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 24px;
+        }
+
+        .modal .form-group {
+            margin-bottom: 16px;
+        }
+
+        .modal label {
+            display: block;
+            font-size: 0.78rem;
+            font-weight: 600;
+            color: rgba(255, 255, 255, 0.5);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 6px;
+        }
+
+        .modal input,
+        .modal select {
+            width: 100%;
+            padding: 12px 14px;
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 10px;
+            color: #fff;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.9rem;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .modal input:focus,
+        .modal select:focus {
+            border-color: #6c63ff;
+        }
+
+        .modal select option {
+            background: #1a1a2e;
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 12px;
+            margin-top: 24px;
+            justify-content: flex-end;
+        }
+
+        .btn-cancel {
+            padding: 10px 22px;
+            background: rgba(255, 255, 255, 0.06);
+            color: rgba(255, 255, 255, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            cursor: pointer;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.875rem;
+            font-weight: 500;
+            transition: background 0.2s;
+        }
+
+        .btn-cancel:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .btn-save {
+            padding: 10px 28px;
+            background: linear-gradient(135deg, #6c63ff, #a855f7);
+            color: #fff;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.875rem;
+            font-weight: 600;
+            box-shadow: 0 4px 15px rgba(108, 99, 255, 0.3);
+            transition: transform 0.15s;
+        }
+
+        .btn-save:hover {
+            transform: translateY(-1px);
+        }
+
+        /* ── Toast ── */
+        #toast {
+            position: fixed;
+            bottom: 32px;
+            right: 32px;
+            background: rgba(30, 30, 50, 0.95);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            color: #fff;
+            padding: 14px 22px;
+            border-radius: 12px;
+            font-size: 0.875rem;
+            font-weight: 500;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
+            transform: translateY(80px);
+            opacity: 0;
+            transition: transform 0.3s, opacity 0.3s;
+            z-index: 1000;
+        }
+
+        #toast.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        #toast.success {
+            border-color: rgba(74, 222, 128, 0.4);
+        }
+
+        #toast.error {
+            border-color: rgba(239, 68, 68, 0.4);
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Top Bar -->
+    <div class="topbar">
+        <div class="topbar-brand">🎓 Symposium Admin</div>
+        <div class="topbar-right">
+            <span class="badge">Admin</span>
+            <button class="btn-logout" id="logoutBtn">Logout</button>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main">
+        <!-- Stats -->
+        <div class="stats">
+            <div class="stat-card">
+                <div class="stat-value" id="totalCount">—</div>
+                <div class="stat-label">Total Registrations</div>
+            </div>
+        </div>
+
+        <!-- Action Bar -->
+        <div class="action-bar">
+            <button class="btn btn-primary" id="addBtn">+ Add Registration</button>
+            <button class="btn btn-refresh" id="refreshBtn">↻ Refresh</button>
+            <input type="text" class="search-input" id="searchInput" placeholder="Search by name, email…">
+        </div>
+
+        <!-- Table -->
+        <div class="table-wrapper">
+            <table id="regTable">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Phone</th>
+                        <th>College</th>
+                        <th>Event</th>
+                        <th>Registered</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="tableBody">
+                    <tr>
+                        <td colspan="8">
+                            <div class="empty-state"><span>⏳</span>Loading…</div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Add / Edit Modal -->
+    <div class="modal-overlay" id="modalOverlay">
+        <div class="modal">
+            <h3 id="modalTitle">Add Registration</h3>
+            <input type="hidden" id="editId">
+            <div class="form-group">
+                <label>Name</label>
+                <input type="text" id="mName" placeholder="Full name">
+            </div>
+            <div class="form-group">
+                <label>Email</label>
+                <input type="email" id="mEmail" placeholder="Email address">
+            </div>
+            <div class="form-group">
+                <label>Phone</label>
+                <input type="tel" id="mPhone" placeholder="Phone number">
+            </div>
+            <div class="form-group">
+                <label>College</label>
+                <input type="text" id="mCollege" placeholder="College name">
+            </div>
+            <div class="form-group">
+                <label>Event</label>
+                <input type="text" id="mEvent" placeholder="Event name">
+            </div>
+            <div class="modal-actions">
+                <button class="btn-cancel" id="cancelBtn">Cancel</button>
+                <button class="btn-save" id="saveBtn">Save</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast -->
+    <div id="toast"></div>
+
+    <script src="js/dashboard.js"></script>
+</body>
+
+</html>
