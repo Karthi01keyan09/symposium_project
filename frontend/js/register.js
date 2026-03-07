@@ -1,5 +1,8 @@
 const form = document.getElementById("registrationForm");
 
+// Live backend URL on Render
+const API_BASE_URL = "https://symposium-backend-vgyc.onrender.com";
+
 form.addEventListener("submit", async function (e) {
     e.preventDefault();
 
@@ -31,7 +34,7 @@ form.addEventListener("submit", async function (e) {
     console.log("Sending data:", { name, email, phone, college, event });
 
     try {
-        const response = await fetch("/api/register", {
+        const response = await fetch(`${API_BASE_URL}/api/register`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
@@ -50,6 +53,6 @@ form.addEventListener("submit", async function (e) {
 
     } catch (error) {
         console.error("Fetch error:", error);
-        alert("Cannot connect to server. Make sure you are accessing the site via http://localhost:4000 and NOT by opening the HTML file directly.");
+        alert("Cannot connect to server. Please try again later.");
     }
 });

@@ -6,8 +6,17 @@ const registrationRoutes = require("./routes/registrationRoutes");
 
 const app = express();
 
-// Middleware
-app.use(cors());
+// Middleware - Allow requests from Vercel frontend and local dev
+const corsOptions = {
+    origin: [
+        /\.vercel\.app$/,       // any *.vercel.app domain
+        "http://localhost:4000",
+        "http://localhost:3000"
+    ],
+    methods: ["GET", "POST"],
+    credentials: true
+};
+app.use(cors(corsOptions));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 

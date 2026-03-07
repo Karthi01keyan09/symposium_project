@@ -12,7 +12,7 @@ const db = mysql.createConnection({
     connectTimeout: 10000
 });
 
-// Connect to database
+// Connect to database and create tables if they don't exist
 db.connect((err) => {
     if (err) {
         console.error("Database connection failed:", err.message);
@@ -20,6 +20,26 @@ db.connect((err) => {
         return;
     }
     console.log("Connected to MySQL database successfully");
+
+    // Auto-create registrations table if it doesn't exist
+    const createTable = `
+        CREATE TABLE IF NOT EXISTS registrations (
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            name VARCHAR(255) NOT NULL,
+            email VARCHAR(255) NOT NULL,
+            phone VARCHAR(20) NOT NULL,
+            college VARCHAR(255) NOT NULL,
+            event VARCHAR(255) NOT NULL,
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        )
+    `;
+    db.query(createTable, (err) => {
+        if (err) {
+            console.error("Failed to create registrations table:", err.message);
+        } else {
+            console.log("Registrations table ready");
+        }
+    });
 });
 
 module.exports = db;
