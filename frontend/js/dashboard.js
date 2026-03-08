@@ -1,6 +1,10 @@
-// Always point to the production Render backend (Railway DB)
-// This ensures admin panel sees the same data as the live website
-const BASE_URL = "https://symposium-backend-vgyc.onrender.com";
+// Smart URL detection:
+// - If opened via localhost or 127.0.0.1  → use local backend (port 4000)
+// - If opened via the live Render URL     → use Render backend
+const isLocal = ["localhost", "127.0.0.1", ""].includes(window.location.hostname);
+const BASE_URL = isLocal
+    ? "http://localhost:4000"
+    : "https://symposium-backend-vgyc.onrender.com";
 
 // ── Auth Guard ───────────────────────────────────────────────────────
 if (!sessionStorage.getItem("adminLoggedIn")) {
