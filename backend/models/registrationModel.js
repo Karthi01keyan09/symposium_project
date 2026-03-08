@@ -22,6 +22,21 @@ const createRegistration = (data, callback) => {
     );
 };
 
+// Check if the same email+event combination exists (duplicate guard)
+const findByEmailAndEvent = (email, event, callback) => {
+    const sql = `
+        SELECT id FROM registrations
+        WHERE email = ? AND event = ?
+        LIMIT 1
+    `;
+    db.query(sql, [email, event], (err, rows) => {
+        if (err) return callback(err, null);
+        // rows is an array; return the first match or null
+        callback(null, rows && rows.length > 0 ? rows[0] : null);
+    });
+};
+
 module.exports = {
-    createRegistration
+    createRegistration,
+    findByEmailAndEvent
 };

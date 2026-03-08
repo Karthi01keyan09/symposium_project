@@ -10,104 +10,118 @@
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/register.css">
     <link rel="stylesheet" href="css/responsive.css">
+    <link rel="stylesheet" href="css/modal.css">
 
 </head>
 
 <body>
 
-<!-- ================= NAVBAR ================= -->
+    <!-- ================= NAVBAR ================= -->
 
-<header>
+    <header>
 
-    <nav class="navbar">
+        <nav class="navbar">
 
-        <h2 class="logo">TECHSYMP</h2>
+            <h2 class="logo">TECHSYMP</h2>
 
-        <ul class="nav-links">
+            <ul class="nav-links">
 
-            <li><a href="index.html">Home</a></li>
-            <li><a href="events.html">Events</a></li>
-            <li><a href="register.html">Register</a></li>
-            <li><a href="about.html">About</a></li>
-            <li><a href="contact.html">Contact</a></li>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="events.html">Events</a></li>
+                <li><a href="register.html">Register</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="contact.html">Contact</a></li>
 
-        </ul>
+            </ul>
 
-    </nav>
+        </nav>
 
-</header>
+    </header>
 
 
 
-<!-- ================= REGISTER SECTION ================= -->
+    <!-- ================= REGISTER SECTION ================= -->
 
-<section class="register-section">
+    <section class="register-section">
 
-    <h1>Event Registration</h1>
-    <p>Fill in the form below to participate in the symposium.</p>
+        <h1>Event Registration</h1>
+        <p>Fill in the form below to participate in the symposium.</p>
 
-    <div class="form-container">
+        <div class="form-container">
 
-        <form id="registrationForm">
+            <form id="registrationForm">
 
-            <div class="form-group">
-                <label>Full Name</label>
-                <input type="text" id="name" placeholder="Enter your name">
-            </div>
+                <div class="form-group">
+                    <label>Full Name</label>
+                    <input type="text" id="name" placeholder="Enter your name">
+                </div>
 
-            <div class="form-group">
-                <label>Email</label>
-                <input type="email" id="email" placeholder="Enter your email">
-            </div>
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" id="email" placeholder="Enter your email">
+                </div>
 
-            <div class="form-group">
-                <label>Phone Number</label>
-                <input type="tel" id="phone" placeholder="Enter phone number">
-            </div>
+                <div class="form-group">
+                    <label>Phone Number</label>
+                    <input type="tel" id="phone" placeholder="Enter phone number">
+                </div>
 
-            <div class="form-group">
-                <label>College Name</label>
-                <input type="text" id="college" placeholder="Enter your college">
-            </div>
+                <div class="form-group">
+                    <label>College Name</label>
+                    <input type="text" id="college" placeholder="Enter your college">
+                </div>
 
-            <div class="form-group">
-                <label>Select Event</label>
+                <div class="form-group">
+                    <label>Select Event</label>
 
-                <select id="event">
+                    <select id="event">
 
-                    <option value="">-- Choose Event --</option>
-                    <option value="Code Craft">Code Craft</option>
-                    <option value="Code Mining">Code Mining</option>
-                    <option value="Debugger">Debugger</option>
-                    <option value="Hit & Run">Hit & Run</option>
-                    <option value="Treasure Hunt">Treasure Hunt</option>
-                    <option value="Cooking Without Fire">Cooking Without Fire</option>
+                        <option value="">-- Choose Event --</option>
+                        <option value="Code Craft">Code Craft</option>
+                        <option value="Code Mining">Code Mining</option>
+                        <option value="Debugger">Debugger</option>
+                        <option value="Hit & Run">Hit & Run</option>
+                        <option value="Treasure Hunt">Treasure Hunt</option>
+                        <option value="Cooking Without Fire">Cooking Without Fire</option>
 
-                </select>
+                    </select>
 
-            </div>
+                </div>
 
-            <button type="submit" class="btn">Register</button>
+                <button type="submit" class="btn">Register</button>
 
-        </form>
+            </form>
 
+        </div>
+
+    </section>
+
+    <!-- ================= SUCCESS MODAL ================= -->
+    <div id="successOverlay" class="success-overlay">
+        <div class="success-modal">
+            <div class="success-icon">&#10003;</div>
+            <h2>Registration Successful!</h2>
+            <p>Welcome to <strong>Tech Symposium 2026</strong>.</p>
+            <p>You have been registered for <strong id="modalEvent"></strong>.</p>
+            <p class="modal-name">Name: <span id="modalName"></span></p>
+            <button class="btn modal-close-btn"
+                onclick="document.getElementById('successOverlay').classList.remove('active')">Close</button>
+        </div>
     </div>
 
-</section>
 
 
+    <!-- ================= FOOTER ================= -->
 
-<!-- ================= FOOTER ================= -->
+    <footer>
 
-<footer>
+        <p>© 2026 Tech Symposium | All Rights Reserved</p>
 
-    <p>© 2026 Tech Symposium | All Rights Reserved</p>
-
-</footer>
+    </footer>
 
 
-<script src="js/main.js"></script>
-<script src="js/register.js"></script>
+    <script src="js/main.js"></script>
+    <script src="js/register.js"></script>
 
 </body>
 
