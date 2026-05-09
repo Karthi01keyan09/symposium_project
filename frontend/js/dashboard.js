@@ -182,5 +182,27 @@ document.getElementById("logoutBtn").addEventListener("click", () => {
     window.location.href = "admin.html";
 });
 
+// ── CRUD Options Card Events ──────────────────────────────────────────
+document.getElementById("cardCreate")?.addEventListener("click", () => {
+    document.getElementById("addBtn").click();
+});
+
+document.getElementById("cardRead")?.addEventListener("click", () => {
+    document.getElementById("regTable").scrollIntoView({ behavior: 'smooth' });
+    const tbody = document.getElementById("tableBody");
+    tbody.classList.add("highlight-row");
+    setTimeout(() => tbody.classList.remove("highlight-row"), 2000);
+});
+
+document.getElementById("cardUpdate")?.addEventListener("click", () => {
+    document.getElementById("regTable").scrollIntoView({ behavior: 'smooth' });
+    showToast("Click the ✏️ Edit button on any row below to update it.", "success");
+});
+
+document.getElementById("cardDelete")?.addEventListener("click", () => {
+    document.getElementById("regTable").scrollIntoView({ behavior: 'smooth' });
+    showToast("Click the 🗑️ Delete button on any row below to remove it.", "success");
+});
+
 // ── Init ──────────────────────────────────────────────────────────────
 loadRegistrations();

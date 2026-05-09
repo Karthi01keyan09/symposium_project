@@ -114,6 +114,48 @@
             margin-top: 4px;
         }
 
+        /* ── CRUD Options ── */
+        .crud-options {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 20px;
+            margin-bottom: 32px;
+        }
+
+        .crud-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 24px;
+            text-align: center;
+            cursor: pointer;
+            transition: transform 0.3s, background 0.3s, box-shadow 0.3s;
+        }
+
+        .crud-card:hover {
+            transform: translateY(-5px);
+            background: rgba(255, 255, 255, 0.08);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+            border-color: rgba(108, 99, 255, 0.4);
+        }
+
+        .crud-icon {
+            font-size: 2.5rem;
+            margin-bottom: 12px;
+        }
+
+        .crud-card h3 {
+            font-size: 1.2rem;
+            color: #fff;
+            margin-bottom: 6px;
+            font-weight: 600;
+        }
+
+        .crud-card p {
+            font-size: 0.85rem;
+            color: rgba(255, 255, 255, 0.5);
+        }
+
         /* ── Action Bar ── */
         .action-bar {
             display: flex;
@@ -121,6 +163,7 @@
             margin-bottom: 24px;
             flex-wrap: wrap;
             align-items: center;
+            justify-content: space-between;
         }
 
         .btn {
@@ -162,7 +205,6 @@
         }
 
         .search-input {
-            margin-left: auto;
             padding: 10px 16px;
             background: rgba(255, 255, 255, 0.06);
             border: 1px solid rgba(255, 255, 255, 0.1);
@@ -171,7 +213,7 @@
             font-family: 'Inter', sans-serif;
             font-size: 0.875rem;
             outline: none;
-            width: 220px;
+            width: 280px;
             transition: border-color 0.3s;
         }
 
@@ -221,7 +263,16 @@
         }
 
         tbody tr:hover {
-            background: rgba(255, 255, 255, 0.03);
+            background: rgba(255, 255, 255, 0.06);
+        }
+
+        .highlight-row {
+            animation: flashRow 2s ease-out;
+        }
+
+        @keyframes flashRow {
+            0% { background: rgba(108, 99, 255, 0.3); }
+            100% { background: transparent; }
         }
 
         td {
@@ -256,11 +307,12 @@
             font-size: 0.8rem;
             font-family: 'Inter', sans-serif;
             font-weight: 500;
-            transition: background 0.2s;
+            transition: background 0.2s, transform 0.1s;
         }
 
         .btn-edit:hover {
             background: rgba(59, 130, 246, 0.25);
+            transform: scale(1.05);
         }
 
         .btn-delete {
@@ -273,11 +325,12 @@
             font-size: 0.8rem;
             font-family: 'Inter', sans-serif;
             font-weight: 500;
-            transition: background 0.2s;
+            transition: background 0.2s, transform 0.1s;
         }
 
         .btn-delete:hover {
             background: rgba(239, 68, 68, 0.22);
+            transform: scale(1.05);
         }
 
         .empty-state {
@@ -472,10 +525,36 @@
             </div>
         </div>
 
+        <!-- CRUD Operations Section -->
+        <div class="crud-options">
+            <div class="crud-card" id="cardCreate">
+                <div class="crud-icon">➕</div>
+                <h3>Create</h3>
+                <p>Add a new registration manually</p>
+            </div>
+            <div class="crud-card" id="cardRead">
+                <div class="crud-icon">📖</div>
+                <h3>Read</h3>
+                <p>View all stored registrations</p>
+            </div>
+            <div class="crud-card" id="cardUpdate">
+                <div class="crud-icon">✏️</div>
+                <h3>Update</h3>
+                <p>Edit an existing student record</p>
+            </div>
+            <div class="crud-card" id="cardDelete">
+                <div class="crud-icon">🗑️</div>
+                <h3>Delete</h3>
+                <p>Remove a record with the dustbin</p>
+            </div>
+        </div>
+
         <!-- Action Bar -->
         <div class="action-bar">
-            <button class="btn btn-primary" id="addBtn">+ Add Registration</button>
-            <button class="btn btn-refresh" id="refreshBtn">↻ Refresh</button>
+            <div>
+                <button class="btn btn-primary" id="addBtn">+ Add Registration</button>
+                <button class="btn btn-refresh" id="refreshBtn">↻ Refresh</button>
+            </div>
             <input type="text" class="search-input" id="searchInput" placeholder="Search by name, email…">
         </div>
 
