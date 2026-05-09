@@ -15,7 +15,11 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            background: linear-gradient(rgba(10, 5, 20, 0.65), rgba(10, 5, 20, 0.75)), url('images/bg_home_collage.png') center/cover no-repeat;
+            background-image: linear-gradient(rgba(10, 5, 20, 0.65), rgba(10, 5, 20, 0.75)), url('images/bg_home_collage.png');
+            background-position: center;
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
             color: #fff;
             position: relative;
             overflow: hidden;
@@ -119,10 +123,10 @@
         <p>Select your role to explore the CRUD operations</p>
 
         <div class="cards">
-            <a href="register.html" class="card">
+            <a href="events.html" class="card">
                 <div class="icon">🎓</div>
                 <h2>Student</h2>
-                <p>Register as a student (Create)</p>
+                <p>Explore events and register</p>
             </a>
             
             <a href="admin.html" class="card">

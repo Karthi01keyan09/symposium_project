@@ -3,7 +3,11 @@
 .events-section{
     padding:60px 10%;
     text-align:center;
-    background: linear-gradient(rgba(10,5,10,0.65), rgba(10,5,10,0.75)), url('../images/bg_aot_collage.png') center/cover no-repeat;
+    background-image: linear-gradient(rgba(10,5,10,0.65), rgba(10,5,10,0.75)), url('../images/bg_aot_collage.png');
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
     min-height: 100vh;
     color: #fff;
 }
