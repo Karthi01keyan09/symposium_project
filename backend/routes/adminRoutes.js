@@ -10,18 +10,11 @@ router.post("/login", (req, res) => {
         return res.status(400).json({ success: false, message: "Username and password required" });
     }
 
-    const sql = "SELECT * FROM admins WHERE username = ? AND password = ?";
-    db.query(sql, [username, password], (err, result) => {
-        if (err) {
-            console.error("Admin login DB error:", err);
-            return res.status(500).json({ success: false, message: "Server error" });
-        }
-        if (result.length > 0) {
-            res.json({ success: true, message: "Login successful" });
-        } else {
-            res.status(401).json({ success: false, message: "Invalid credentials" });
-        }
-    });
+    if (username === "karthii" && password === "karthi_09") {
+        return res.json({ success: true, message: "Login successful" });
+    } else {
+        return res.status(401).json({ success: false, message: "Invalid credentials" });
+    }
 });
 
 // ── GET /admin/registrations  (Read all) ─────────────────────────

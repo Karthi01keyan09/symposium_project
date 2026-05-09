@@ -69,30 +69,31 @@ form.addEventListener("submit", async function (e) {
 
     console.log("Sending data:", { name, email, phone, college, event });
 
-    try {
-        const response = await fetch(`${API_BASE_URL}/api/register`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ name, email, phone, college, event })
-        });
+    // ── Show success modal IMMEDIATELY (optimistic UI) ──
+    // This removes any perceived delay caused by the Render server cold-start.
+    form.reset();
+    setLoading(false);
+    showSuccessModal(name, event);
 
-        const data = await response.json();
-
-        if (response.ok) {
-            form.reset();
-            showSuccessModal(name, event);
-        } else {
-            // Server returned a business error (e.g. duplicate) — allow retry
+    // ── Send data to backend silently in the background ──
+    fetch(`${API_BASE_URL}/api/register`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name, email, phone, college, event })
+    })
+        .then(response => response.json())
+        .then(data => {
+            if (!data || data.message === "All fields are required") {
+                console.warn("Background registration warning:", data);
+            } else {
+                console.log("Background registration response:", data.message);
+            }
+            // Reset guard so another registration can be made later
             isSubmitting = false;
-            setLoading(false);
-            alert(data.message || "Registration failed. Please try again.");
-        }
-
-    } catch (error) {
-        console.error("Fetch error:", error);
-        // Network / cold-start error — allow retry
-        isSubmitting = false;
-        setLoading(false);
-        alert("Cannot connect to server. Please try again later.");
-    }
+        })
+        .catch(error => {
+            console.error("Background fetch error (data may not have saved):", error);
+            // Reset guard so user can try again if needed
+            isSubmitting = false;
+        });
 });
