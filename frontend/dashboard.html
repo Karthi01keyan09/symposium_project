@@ -549,38 +549,46 @@
             </div>
         </div>
 
-        <!-- Action Bar -->
-        <div class="action-bar">
-            <div>
-                <button class="btn btn-primary" id="addBtn">+ Add Registration</button>
-                <button class="btn btn-refresh" id="refreshBtn">↻ Refresh</button>
+        <!-- Data Section (Hidden by default) -->
+        <div id="dataSection" style="display: none; animation: slideUp 0.3s ease;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                <h2 id="sectionTitle" style="font-size: 1.5rem; font-weight: 600;">Data View</h2>
+                <button class="btn btn-refresh" id="closeSectionBtn">✖ Close</button>
             </div>
-            <input type="text" class="search-input" id="searchInput" placeholder="Search by name, email…">
-        </div>
 
-        <!-- Table -->
-        <div class="table-wrapper">
-            <table id="regTable">
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Name</th>
-                        <th>Email</th>
-                        <th>Phone</th>
-                        <th>College</th>
-                        <th>Event</th>
-                        <th>Registered</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody id="tableBody">
-                    <tr>
-                        <td colspan="8">
-                            <div class="empty-state"><span>⏳</span>Loading…</div>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
+            <!-- Action Bar -->
+            <div class="action-bar">
+                <div>
+                    <button class="btn btn-primary" id="addBtn" style="display: none;">+ Add Registration</button>
+                    <button class="btn btn-refresh" id="refreshBtn">↻ Refresh</button>
+                </div>
+                <input type="text" class="search-input" id="searchInput" placeholder="Search by name, email…">
+            </div>
+
+            <!-- Table -->
+            <div class="table-wrapper">
+                <table id="regTable">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Phone</th>
+                            <th>College</th>
+                            <th>Event</th>
+                            <th>Registered</th>
+                            <th id="actionsHeader">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tableBody">
+                        <tr>
+                            <td colspan="8">
+                                <div class="empty-state"><span>⏳</span>Loading…</div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 

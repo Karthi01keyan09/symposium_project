@@ -15,6 +15,7 @@ if (!sessionStorage.getItem("adminLoggedIn")) {
 
 // ── State ────────────────────────────────────────────────────────────
 let allRegistrations = [];
+let currentMode = 'none'; // 'read', 'update', 'delete', or 'none'
 
 // ── Toast Helper ──────────────────────────────────────────────────────
 function showToast(msg, type = "success") {
@@ -42,11 +43,33 @@ async function loadRegistrations() {
 // ── Render Table ──────────────────────────────────────────────────────
 function renderTable(data) {
     const tbody = document.getElementById("tableBody");
+    const actionsHeader = document.getElementById("actionsHeader");
+    
+    // Manage header visibility based on mode
+    if (currentMode === 'read' || currentMode === 'none') {
+        actionsHeader.style.display = 'none';
+    } else {
+        actionsHeader.style.display = 'table-cell';
+    }
+
     if (data.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="8"><div class="empty-state"><span>📭</span>No registrations found.</div></td></tr>`;
+        let colspan = currentMode === 'read' ? 7 : 8;
+        tbody.innerHTML = `<tr><td colspan="${colspan}"><div class="empty-state"><span>📭</span>No registrations found.</div></td></tr>`;
         return;
     }
-    tbody.innerHTML = data.map(row => `
+
+    tbody.innerHTML = data.map(row => {
+        let actionCell = '';
+        if (currentMode === 'update') {
+            actionCell = `<td><div class="actions"><button class="btn-edit" onclick="openEdit(${row.id})">✏️ Edit</button></div></td>`;
+        } else if (currentMode === 'delete') {
+            actionCell = `<td><div class="actions"><button class="btn-delete" onclick="deleteRegistration(${row.id})">🗑️ Delete</button></div></td>`;
+        } else if (currentMode === 'read' || currentMode === 'none') {
+            // No action cell in read mode
+            actionCell = '';
+        }
+
+        return `
         <tr>
             <td>${row.id}</td>
             <td>${escHtml(row.name)}</td>
@@ -55,14 +78,9 @@ function renderTable(data) {
             <td>${escHtml(row.college)}</td>
             <td><span class="event-badge">${escHtml(row.event)}</span></td>
             <td>${row.created_at ? new Date(row.created_at).toLocaleDateString() : '—'}</td>
-            <td>
-                <div class="actions">
-                    <button class="btn-edit" onclick="openEdit(${row.id})">✏️ Edit</button>
-                    <button class="btn-delete" onclick="deleteRegistration(${row.id})">🗑️ Delete</button>
-                </div>
-            </td>
+            ${actionCell}
         </tr>
-    `).join("");
+    `}).join("");
 }
 
 function escHtml(str) {
@@ -184,25 +202,41 @@ document.getElementById("logoutBtn").addEventListener("click", () => {
     window.location.href = "admin.html";
 });
 
+// ── Section Visibility Helper ─────────────────────────────────────────
+function openDataSection(title) {
+    document.getElementById("dataSection").style.display = "block";
+    document.getElementById("sectionTitle").textContent = title;
+    document.getElementById("regTable").scrollIntoView({ behavior: 'smooth' });
+}
+
+document.getElementById("closeSectionBtn")?.addEventListener("click", () => {
+    document.getElementById("dataSection").style.display = "none";
+    currentMode = 'none';
+});
+
 // ── CRUD Options Card Events ──────────────────────────────────────────
 document.getElementById("cardCreate")?.addEventListener("click", () => {
+    // Creating simply opens the modal. It doesn't need to show the data table unless desired.
     document.getElementById("addBtn").click();
 });
 
 document.getElementById("cardRead")?.addEventListener("click", () => {
-    document.getElementById("regTable").scrollIntoView({ behavior: 'smooth' });
-    const tbody = document.getElementById("tableBody");
-    tbody.classList.add("highlight-row");
-    setTimeout(() => tbody.classList.remove("highlight-row"), 2000);
+    currentMode = 'read';
+    openDataSection("📖 All Registrations");
+    renderTable(allRegistrations);
 });
 
 document.getElementById("cardUpdate")?.addEventListener("click", () => {
-    document.getElementById("regTable").scrollIntoView({ behavior: 'smooth' });
+    currentMode = 'update';
+    openDataSection("✏️ Update Registrations");
+    renderTable(allRegistrations);
     showToast("Click the ✏️ Edit button on any row below to update it.", "success");
 });
 
 document.getElementById("cardDelete")?.addEventListener("click", () => {
-    document.getElementById("regTable").scrollIntoView({ behavior: 'smooth' });
+    currentMode = 'delete';
+    openDataSection("🗑️ Delete Registrations");
+    renderTable(allRegistrations);
     showToast("Click the 🗑️ Delete button on any row below to remove it.", "success");
 });
 
