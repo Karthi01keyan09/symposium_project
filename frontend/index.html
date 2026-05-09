@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DBMS Operations Demo</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Oswald:wght@500;700&display=swap" rel="stylesheet">
     <style>
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -15,34 +15,10 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+            background: linear-gradient(rgba(10, 5, 20, 0.8), rgba(10, 5, 20, 0.85)), url('images/bg_jjk.png') center/cover no-repeat;
             color: #fff;
             position: relative;
             overflow: hidden;
-        }
-
-        /* Animated background blobs */
-        body::before, body::after {
-            content: '';
-            position: absolute;
-            border-radius: 50%;
-            filter: blur(80px);
-            opacity: 0.3;
-            animation: float 8s ease-in-out infinite alternate;
-        }
-        body::before {
-            width: 400px; height: 400px;
-            background: radial-gradient(circle, #6c63ff, transparent);
-            top: -100px; left: -100px;
-        }
-        body::after {
-            width: 350px; height: 350px;
-            background: radial-gradient(circle, #f09af9, transparent);
-            bottom: -80px; right: -80px;
-            animation-delay: -4s;
-        }
-        @keyframes float {
-            to { transform: translate(30px, 30px); }
         }
 
         .container {
@@ -52,12 +28,16 @@
         }
 
         h1 {
-            font-size: 3rem;
+            font-family: 'Oswald', sans-serif;
+            font-size: 4rem;
             font-weight: 700;
             margin-bottom: 10px;
-            background: linear-gradient(to right, #fff, #f09af9);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            background: linear-gradient(to right, #9d4edd, #ff0055);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 20px rgba(157, 78, 221, 0.5);
         }
 
         p {
@@ -74,27 +54,42 @@
         }
 
         .card {
-            background: rgba(255, 255, 255, 0.07);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            border-radius: 24px;
+            background: rgba(20, 10, 30, 0.6);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(157, 78, 221, 0.3);
+            border-radius: 12px;
             padding: 40px;
             width: 280px;
             cursor: pointer;
             text-decoration: none;
             color: #fff;
-            transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
+            transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
             display: flex;
             flex-direction: column;
             align-items: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: -100%;
+            width: 50%; height: 100%;
+            background: linear-gradient(to right, transparent, rgba(255,255,255,0.1), transparent);
+            transform: skewX(-25deg);
+            transition: 0.5s;
+        }
+
+        .card:hover::before {
+            left: 150%;
         }
 
         .card:hover {
-            transform: translateY(-10px);
-            background: rgba(255, 255, 255, 0.1);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
-            border-color: rgba(108, 99, 255, 0.5);
+            transform: translateY(-5px) scale(1.02);
+            box-shadow: 0 15px 35px rgba(157, 78, 221, 0.4);
+            border-color: #ff0055;
         }
 
         .icon {
@@ -103,9 +98,12 @@
         }
 
         .card h2 {
-            font-size: 1.5rem;
-            font-weight: 600;
+            font-family: 'Oswald', sans-serif;
+            font-size: 1.8rem;
+            font-weight: 700;
             margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
 
         .card p {
