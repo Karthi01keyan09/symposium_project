@@ -1,15 +1,8 @@
 const form = document.getElementById("registrationForm");
 const submitBtn = form.querySelector("button[type='submit']");
 
-// Smart URL detection:
-// - If opened via localhost or 127.0.0.1  → use local backend (port 4000)
-// - If opened via the live Render URL     → use Render backend
-const isLocal = window.location.hostname === "localhost" || 
-                window.location.hostname === "127.0.0.1" || 
-                window.location.protocol === "file:";
-const API_BASE_URL = isLocal
-    ? "http://localhost:4000"
-    : "https://symposium-backend-vgyc.onrender.com";
+// Force local backend for DBMS demonstration
+const API_BASE_URL = "http://localhost:4000";
 
 // ── Guard flag: prevents duplicate submissions ──
 let isSubmitting = false;
