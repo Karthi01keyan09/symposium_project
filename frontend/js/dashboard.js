@@ -1,7 +1,9 @@
 // Smart URL detection:
 // - If opened via localhost or 127.0.0.1  → use local backend (port 4000)
 // - If opened via the live Render URL     → use Render backend
-const isLocal = ["localhost", "127.0.0.1", ""].includes(window.location.hostname);
+const isLocal = window.location.hostname === "localhost" || 
+                window.location.hostname === "127.0.0.1" || 
+                window.location.protocol === "file:";
 const BASE_URL = isLocal
     ? "http://localhost:4000"
     : "https://symposium-backend-vgyc.onrender.com";
