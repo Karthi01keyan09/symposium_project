@@ -30,17 +30,20 @@ router.get("/registrations", (req, res) => {
 
 // ── POST /admin/registrations  (Create) ──────────────────────────
 router.post("/registrations", (req, res) => {
-    const { name, email, phone, college, event } = req.body;
-    if (!name || !email || !phone || !college || !event) {
+    const { register_number, name, email, phone, college, event } = req.body;
+    if (!register_number || !name || !email || !phone || !college || !event) {
         return res.status(400).json({ message: "All fields are required" });
     }
-    const sql = "INSERT INTO registrations (name, email, phone, college, event) VALUES (?, ?, ?, ?, ?)";
-    db.query(sql, [name, email, phone, college, event], (err, result) => {
+    const sql = "INSERT INTO registrations (register_number, name, email, phone, college, event) VALUES (?, ?, ?, ?, ?, ?)";
+    db.query(sql, [register_number, name, email, phone, college, event], (err, result) => {
         if (err) {
             console.error("Create registration error:", err);
+            if (err.code === 'ER_DUP_ENTRY') {
+                return res.status(409).json({ message: "This register number is already registered!" });
+            }
             return res.status(500).json({ message: "Server error" });
         }
-        res.status(201).json({ message: "Registration created", id: result.insertId });
+        res.status(201).json({ message: "Registration created", register_number });
     });
 });
 
@@ -51,7 +54,7 @@ router.put("/registrations/:id", (req, res) => {
     if (!name || !email || !phone || !college || !event) {
         return res.status(400).json({ message: "All fields are required" });
     }
-    const sql = "UPDATE registrations SET name=?, email=?, phone=?, college=?, event=? WHERE id=?";
+    const sql = "UPDATE registrations SET name=?, email=?, phone=?, college=?, event=? WHERE register_number=?";
     db.query(sql, [name, email, phone, college, event, id], (err, result) => {
         if (err) {
             console.error("Update registration error:", err);
@@ -67,7 +70,7 @@ router.put("/registrations/:id", (req, res) => {
 // ── DELETE /admin/registrations/:id  (Delete) ────────────────────
 router.delete("/registrations/:id", (req, res) => {
     const { id } = req.params;
-    db.query("DELETE FROM registrations WHERE id = ?", [id], (err, result) => {
+    db.query("DELETE FROM registrations WHERE register_number = ?", [id], (err, result) => {
         if (err) {
             console.error("Delete registration error:", err);
             return res.status(500).json({ message: "Server error" });

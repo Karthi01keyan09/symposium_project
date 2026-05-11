@@ -40,7 +40,7 @@ db.connect((err) => {
             // Auto-create registrations table
             const createRegistrations = `
                 CREATE TABLE IF NOT EXISTS registrations (
-                    id INT AUTO_INCREMENT PRIMARY KEY,
+                    register_number VARCHAR(50) PRIMARY KEY,
                     name VARCHAR(255) NOT NULL,
                     email VARCHAR(255) NOT NULL,
                     phone VARCHAR(20) NOT NULL,

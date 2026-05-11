@@ -39,6 +39,7 @@ form.addEventListener("submit", async function (e) {
     if (isSubmitting) return;
 
     const name = document.getElementById("name").value.trim();
+    const register_number = document.getElementById("register_number").value.trim();
     const email = document.getElementById("email").value.trim();
     const phone = document.getElementById("phone").value.trim();
     const college = document.getElementById("college").value.trim();
@@ -46,7 +47,7 @@ form.addEventListener("submit", async function (e) {
 
     // ================= FRONTEND VALIDATION =================
 
-    if (!name || !email || !phone || !college || !event) {
+    if (!name || !register_number || !email || !phone || !college || !event) {
         alert("Please fill in all fields before submitting.");
         return;
     }
@@ -67,33 +68,31 @@ form.addEventListener("submit", async function (e) {
     isSubmitting = true;
     setLoading(true);
 
-    console.log("Sending data:", { name, email, phone, college, event });
+    console.log("Sending data:", { register_number, name, email, phone, college, event });
 
-    // ── Show success modal IMMEDIATELY (optimistic UI) ──
-    // This removes any perceived delay caused by the Render server cold-start.
-    form.reset();
-    setLoading(false);
-    showSuccessModal(name, event);
-
-    // ── Send data to backend silently in the background ──
-    fetch(`${API_BASE_URL}/api/register`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, email, phone, college, event })
-    })
-        .then(response => response.json())
-        .then(data => {
-            if (!data || data.message === "All fields are required") {
-                console.warn("Background registration warning:", data);
-            } else {
-                console.log("Background registration response:", data.message);
-            }
-            // Reset guard so another registration can be made later
-            isSubmitting = false;
-        })
-        .catch(error => {
-            console.error("Background fetch error (data may not have saved):", error);
-            // Reset guard so user can try again if needed
-            isSubmitting = false;
+    // ── Send data to backend and wait for response ──
+    try {
+        const response = await fetch(`${API_BASE_URL}/api/register`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ register_number, name, email, phone, college, event })
         });
+        
+        const data = await response.json();
+        
+        if (response.ok) {
+            form.reset();
+            setLoading(false);
+            showSuccessModal(name, event);
+        } else {
+            setLoading(false);
+            alert(data.message || "Registration failed. Please try again.");
+        }
+    } catch (error) {
+        console.error("Fetch error:", error);
+        setLoading(false);
+        alert("Network error. Please try again.");
+    } finally {
+        isSubmitting = false;
+    }
 });

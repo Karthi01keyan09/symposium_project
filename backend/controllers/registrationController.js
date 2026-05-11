@@ -3,10 +3,10 @@ const Registration = require("../models/registrationModel");
 // Handle registration request
 const registerParticipant = (req, res) => {
 
-    const { name, email, phone, college, event } = req.body;
+    const { register_number, name, email, phone, college, event } = req.body;
 
     // Basic validation
-    if (!name || !email || !phone || !college || !event) {
+    if (!register_number || !name || !email || !phone || !college || !event) {
         return res.status(400).json({
             message: "All fields are required"
         });
@@ -17,7 +17,7 @@ const registerParticipant = (req, res) => {
 
         if (err) {
             console.error("Duplicate-check error:", err);
-            return res.status(500).json({ message: "Database error" });
+            return res.status(500).json({ message: "Database error: " + err.message });
         }
 
         if (existing) {
@@ -27,20 +27,25 @@ const registerParticipant = (req, res) => {
         }
 
         // Not a duplicate — proceed with insert
-        const data = { name, email, phone, college, event };
+        const data = { register_number, name, email, phone, college, event };
 
         Registration.createRegistration(data, (err, result) => {
 
             if (err) {
                 console.error(err);
+                if (err.code === 'ER_DUP_ENTRY') {
+                    return res.status(409).json({
+                        message: "This register number is already registered!"
+                    });
+                }
                 return res.status(500).json({
-                    message: "Database error"
+                    message: "Database error: " + err.message
                 });
             }
 
             res.status(201).json({
                 message: "Registration successful",
-                id: result.insertId
+                register_number
             });
 
         });

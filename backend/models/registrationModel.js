@@ -3,13 +3,13 @@ const db = require("../config/db");
 const createRegistration = (data, callback) => {
 
     const sql = `
-        INSERT INTO registrations (name, email, phone, college, event)
-        VALUES (?, ?, ?, ?, ?)
+        INSERT INTO registrations (register_number, name, email, phone, college, event)
+        VALUES (?, ?, ?, ?, ?, ?)
     `;
 
     db.query(
         sql,
-        [data.name, data.email, data.phone, data.college, data.event],
+        [data.register_number, data.name, data.email, data.phone, data.college, data.event],
         (err, result) => {
 
             if (err) {
@@ -25,7 +25,7 @@ const createRegistration = (data, callback) => {
 // Check if the same email+event combination exists (duplicate guard)
 const findByEmailAndEvent = (email, event, callback) => {
     const sql = `
-        SELECT id FROM registrations
+        SELECT register_number FROM registrations
         WHERE email = ? AND event = ?
         LIMIT 1
     `;

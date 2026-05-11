@@ -54,9 +54,9 @@ function renderTable(data) {
     tbody.innerHTML = data.map(row => {
         let actionCell = '';
         if (currentMode === 'update') {
-            actionCell = `<td><div class="actions"><button class="btn-edit" onclick="openEdit(${row.id})">✏️ Edit</button></div></td>`;
+            actionCell = `<td><div class="actions"><button class="btn-edit" onclick="openEdit('${row.register_number}')">✏️ Edit</button></div></td>`;
         } else if (currentMode === 'delete') {
-            actionCell = `<td><div class="actions"><button class="btn-delete" onclick="deleteRegistration(${row.id})">🗑️ Delete</button></div></td>`;
+            actionCell = `<td><div class="actions"><button class="btn-delete" onclick="deleteRegistration('${row.register_number}')">🗑️ Delete</button></div></td>`;
         } else if (currentMode === 'read' || currentMode === 'none') {
             // No action cell in read mode
             actionCell = '';
@@ -64,7 +64,7 @@ function renderTable(data) {
 
         return `
         <tr>
-            <td>${row.id}</td>
+            <td>${row.register_number}</td>
             <td>${escHtml(row.name)}</td>
             <td>${escHtml(row.email)}</td>
             <td>${escHtml(row.phone)}</td>
@@ -85,6 +85,7 @@ function escHtml(str) {
 document.getElementById("searchInput").addEventListener("input", function () {
     const q = this.value.toLowerCase();
     const filtered = allRegistrations.filter(r =>
+        r.register_number?.toLowerCase().includes(q) ||
         r.name?.toLowerCase().includes(q) ||
         r.email?.toLowerCase().includes(q) ||
         r.college?.toLowerCase().includes(q) ||
@@ -103,7 +104,7 @@ function closeModal() {
     clearModal();
 }
 function clearModal() {
-    ["editId", "mName", "mEmail", "mPhone", "mCollege", "mEvent"].forEach(id => {
+    ["editId", "mRegNo", "mName", "mEmail", "mPhone", "mCollege", "mEvent"].forEach(id => {
         document.getElementById(id).value = "";
     });
 }
@@ -116,9 +117,10 @@ document.getElementById("addBtn").addEventListener("click", () => {
 
 // ── Open Edit Modal ───────────────────────────────────────────────────
 function openEdit(id) {
-    const row = allRegistrations.find(r => r.id === id);
+    const row = allRegistrations.find(r => r.register_number === id);
     if (!row) return;
-    document.getElementById("editId").value = row.id;
+    document.getElementById("editId").value = row.register_number;
+    document.getElementById("mRegNo").value = row.register_number;
     document.getElementById("mName").value = row.name;
     document.getElementById("mEmail").value = row.email;
     document.getElementById("mPhone").value = row.phone;
@@ -130,18 +132,19 @@ function openEdit(id) {
 // ── Save (Create or Update) ───────────────────────────────────────────
 document.getElementById("saveBtn").addEventListener("click", async () => {
     const id = document.getElementById("editId").value;
+    const register_number = document.getElementById("mRegNo").value.trim();
     const name = document.getElementById("mName").value.trim();
     const email = document.getElementById("mEmail").value.trim();
     const phone = document.getElementById("mPhone").value.trim();
     const college = document.getElementById("mCollege").value.trim();
     const event = document.getElementById("mEvent").value.trim();
 
-    if (!name || !email || !phone || !college || !event) {
+    if (!register_number || !name || !email || !phone || !college || !event) {
         showToast("All fields are required.", "error");
         return;
     }
 
-    const body = { name, email, phone, college, event };
+    const body = { register_number, name, email, phone, college, event };
     const isEdit = !!id;
     const url = isEdit ? `${BASE_URL}/admin/registrations/${id}` : `${BASE_URL}/admin/registrations`;
     const method = isEdit ? "PUT" : "POST";

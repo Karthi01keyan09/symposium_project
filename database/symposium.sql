@@ -3,7 +3,7 @@ CREATE DATABASE symposium_db;
 USE symposium_db;
 
 CREATE TABLE registrations (
-    id INT AUTO_INCREMENT PRIMARY KEY,
+    register_number VARCHAR(50) PRIMARY KEY,
     name VARCHAR(100),
     email VARCHAR(100),
     phone VARCHAR(15),
